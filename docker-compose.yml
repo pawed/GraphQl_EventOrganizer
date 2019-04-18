@@ -1,0 +1,7 @@
+  mongo:
+    container_name: mongo_exercise
+    image: mongo
+    ports:
+      - "27019:27017"
+    volumes:
+      - mongo-data-volume:/data/db
