@@ -1,4 +1,5 @@
 ﻿using Common.Models;
+using GraphQLApi.Base;
 using GraphQLApi.Context;
 using GraphQLApi.Interfaces;
 using GraphQLApi.Models;
@@ -11,30 +12,45 @@ using System.Threading.Tasks;
 
 namespace GraphQLApi.Repositories
 {
-    public class PeopleRepository : IPeopleRepository
+    public class PeopleRepository : MongoBaseRepository<People>, IPeopleRepository
     {
-        private readonly MongoDbContext _context = null;
+       // private readonly MongoDbContext _context = null;
 
-        public PeopleRepository(IOptions<DbSettings> settings)
+        public PeopleRepository(IOptions<DbSettings> settings):base(settings.Value)
         {
-            _context = new MongoDbContext(settings);
+            //settings.Value;
+            
+        }
+
+        public People Add(People people)
+        {
+            throw new NotImplementedException();
         }
 
         public IEnumerable<People> GetAll()
         {
 
-            var documents =  _context.People.AsQueryable().ToList();
-
+            var documents = base.GetAll();
             return documents;
+
+            //var documents =  _context.AsQueryable().ToList();
+
+            //return documents;
         }
 
         public People GetById(string id)
         {
-           var query= Builders<People>.Filter.Eq(a => a.Id, id);
+            //throw new NotImplementedException();
 
-            var documents = _context.People.Find(query).FirstOrDefault();
+            var query= Builders<People>.Filter.Eq(a => a.Id, id);
+
+            var documents = base.GetSingle(query);
 
             return documents;
+
+            // var documents = _context.People.Find(query).FirstOrDefault();
+
+            // return documents;
         }
     }
 }

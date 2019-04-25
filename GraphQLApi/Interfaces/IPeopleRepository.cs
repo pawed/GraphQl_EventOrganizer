@@ -10,5 +10,6 @@ namespace GraphQLApi.Interfaces
     {
         IEnumerable<People> GetAll();
         People GetById(string id);
+        People Add(People people);
     }
 }

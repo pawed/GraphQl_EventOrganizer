@@ -12,14 +12,13 @@ namespace GraphQLApi.Context
 {
     public class MongoDbContext
     {
-        private const string CollectionName = "People";
         private readonly IMongoDatabase _database = null;
 
-        public MongoDbContext(IOptions<DbSettings> settings)
+        public MongoDbContext(DbSettings settings)
         {
-            var client = new MongoClient(settings.Value.ConnectionString);
+            var client = new MongoClient(settings.ConnectionString);
             if (client != null)
-                _database = client.GetDatabase(settings.Value.Database);
+                _database = client.GetDatabase(settings.Database);
 
             BsonClassMap.RegisterClassMap<People>(cm => 
             {
@@ -28,12 +27,10 @@ namespace GraphQLApi.Context
             });
         }
 
-        public IMongoCollection<People> People
+        public IMongoCollection<T> GetCollection<T>(string collectionName)
         {
-            get
-            {
-                return _database.GetCollection<People>(CollectionName);
-            }
+            return _database.GetCollection<T>(collectionName);
         }
+   
     }
 }
